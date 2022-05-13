@@ -128,7 +128,9 @@ usando el bin de bash
 
 $ bash sript.sh
 
-o ejecutandolo solo a el mismo, generalmente hecho en los servidores de linux
+o ejecutandolo solo a el mismo, generalmente hecho en los servidores de linux.
+Esto se puede hacer desde diferentes archivos, no se si se le pueda dar 
+el mismo uso a bash
 
 $ ./script.sh
 
@@ -148,4 +150,148 @@ obviamente no al nivel de man o info, pero ayuda.
 - echo (datos):
 	imprime en la terminal datos dados a la funcion
 
+### Variables en Bash
 
+Existen diferentes tipos de variables en BASH:
+
+Caracteristicas de todas:
+- Se definen nombre=valor
+- Se pueden llamar usando $nombre
+- Se puede ver que tienen usando echo "$nombre"
+
+- Variables de Entorno:
+	Estas estan en todos los OS, son la información almacenada sobre 
+	los procesos, estado y otros del OS en sí.
+	En linux se puede agregar variables de entorno en el archivo 
+	/etc/profile
+	
+	Generalmente se usa UPPERCASE_SNAKE para escribir estas variables.
+
+	Dado a que son constantes y no van a cambiar a lo largo de su uso
+
+	Despues de escribirla vamos a usar export para su uso y reiniciar 
+	el computador, ya que este archivo solo se ejecuta en el inicio del
+	sistema.
+	Se puede hacer source al archivo para tener la variable, pero solo la 
+	va a tener en la terminal en la que se realizo el source.
+
+- Variables Locales o del Programa
+	Las vamos a declarar dentro del archivo las variables que vayamos a usar
+	No es necesario usar uppercase, pero es recomendado usar snake_case,
+	solo se van a usar en el script en el que se declararon, 
+	si se necesita usar en otro script, se va a tener que volver 
+	un semi tipo de variable de entorno, usando export en la variable.
+
+### Operadores en Bash
+
+Existen diferentes tipos de operadores, y diferentes operadores dentro de estos:
+
+- Operadores Aritmeticos
+	Operaciones Matematicas generales
+	- suma +
+	- resta - 
+	- mult *
+	- div /
+	- mod % 
+	- potencia **
+
+Para usar los operadores aritmeticos de una forma directa, sin tener que 
+hacer otra variable. Vamos a tener que usar $(()), 
+donde se realiza la operacion en el primer (), y en el segundo se pasa 
+como un valor de una variable, sin tener que crear una como tal.
+
+- Operadores Relacionales
+	Relacion entre dos variables
+	- mayor: >
+	- menor: <
+	- mayor o igual que: >=
+	- menor o igual que: <=
+	- igual que: ==
+	- diferente que: !=
+
+- Operadores de Asignación
+	Iguales que los Matematicos, pero 
+	agregando, restando, ... el valor a la variable,
+	no hay de potenciacion
+	- incremento +=
+	- decremento -=
+	- ... *=
+	- ... /=
+	- ... %=
+
+### Argumentos en los scripts de bash
+
+Generalmente los comandos se les pasa argumentos, como en vim se pasa el archivo de texto a 
+editar. Estos pueden ser usados en el script refecienciandolos asi:
+- $1 al $9, si son de un digito, el numero de "entrada"
+- ${10} al ${infinito}, si son de dos digitos, el numero de "entrada"
+
+Existen argumentos y variables que siempre van a estar en cualquier script
+- $0: el nombre del script, cambia el nombre si lo ejecutamos con ./ o bash
+- $#: el numero de argumentos disponibles
+- $*: todos los argumentos
+
+Para usar los argumentos simplemente lo vamos a referenciar o asignar a una variable.
+
+### Parametros en los scripts de bash
+
+Ademas de los argumentos, se pueden pasar parametros, flags o opciones, nosotros podemos 
+Estos simple y sencillamente se van a utilizar como los argumentos, solo que vamos a darle un 
+trado diferente por el slash que tienen al inicio. 
+Ya es nuestro deber mirar que acciones van a ser hechas por cada parametro y opcion en nuestro 
+script.
+
+Podemos filtrar los parametros usando loops atravez de estos y usando 
+cases para cada uno. Esto lo veremos más adelante
+
+### Output de otros Comandos
+
+Para obtener el output de otros comandos y referenciarlos a una variable, vamos a tener que 
+usar $(), y ahí dentro vamos a poner el comando. Aunque tambien podemos simplemente 
+escribir el comando como tal usando el backtick `comando`.
+
+Lo más general es usar comandos de información o procesamiento de información.
+
+### Debugging en BASH
+
+Bash nos permite hacer debugging de nuestro codigo usando las flags -v y -x al momento de 
+ejecutar nuestro codigo, ambas tiene diferencias:
+
+- -x:
+	Ejecuta el código, muestra linea por linea y agrega al inicio de esta un + por cada nivel 
+	de closure en el programa. Creo. Si no, tambien ayuda a diferenciar las lineas del programa
+	y los inputs/outputs de este
+
+- -v:
+	Ejecuta el código, muestra linea por linea, pero sin el +.
+
+### Inputs de Usuario
+
+Algunas veces vamos a necesitar que el usuario ingrese algun que otro dato
+para poder realizar diferentes acciones.
+
+Usaremos el comando read para esto, se puede usar de dos formas, con y sin echo.
+
+Con echo, lo usaremos para crear un tipo de promnt, leer el valor y despues usarlo.
+Para usarlo debemos leer una variable que usa read, llamada $REPLY, esta variable 
+va a contener el ultimo valor que obtuvo read.
+
+echo "hello: "
+read > goodbye
+echo "$REPLY" > goodbye
+
+Pero para no usar echo, podemos usar la flag -p que nos permite agregarle un prompt al 
+read. Y una variable que guarde el input. 
+
+response=""
+read -p "hello: " reply > goodbye
+echo "$reply" > goodbye
+
+Ademas de esta flag, read tiene otras como:
+
+- -s: sigiloso, que no muestra lo que se le escribe, para contraseñas
+- -n [int]: limita el numero de caracteres de entrada
+- -r: toma el retroceso como un caracter, no borra nada el input que se le haya ingresado
+
+Podemos usar esto para validacion de información, o se pueden usar RegEx /.*/
+Pero para eso debemos usar condicionales, cosa que no hemos visto

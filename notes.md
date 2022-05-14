@@ -217,7 +217,14 @@ como un valor de una variable, sin tener que crear una como tal.
 	- decremento -=
 	- ... *=
 	- ... /=
-	- ... %=
+	- ... %
+
+- Operadores Logicos
+	Operadores que nos permiten hacer procesos logicos
+	con sentencias verdaderas o falsas
+	- and: &&
+	- or: ||
+	- not: !
 
 ### Argumentos en los scripts de bash
 
@@ -295,3 +302,118 @@ Ademas de esta flag, read tiene otras como:
 
 Podemos usar esto para validacion de información, o se pueden usar RegEx /.*/
 Pero para eso debemos usar condicionales, cosa que no hemos visto
+
+### Descargas desde Internet
+
+Para descargar archivos desde internet, en bash, podemos usar comandos como:
+- wget [-flag] URL:
+	Nos va a descargar el archivo en la URL, se puede poner diferentes flags para 
+	que lo descarge cambiando el nombre, el directorio de descarga y demás.
+
+- curl: 
+	Nos descarga archivos desde servicios de APIs
+
+### If Elif Else
+
+Los bloques de condicionales son estructuras básicas en la programación, en 
+Bash se implementan así
+
+if (( condicional )); then
+	ejecucion de la condicional
+elif (( condicional_2 )); then
+	segunda condicional
+else
+	caso else
+fi
+
+En las condicionales podemos usar (( condicional )), ( condicional ), [[ condicional ]] o [ condicional ], 
+tienen una gran diferencia entre sí, y es mejor usar [].
+
+- (()):
+	Va a calcular matematicamente el valor de la condicional, podemos usar operadores 
+	relacionales, lógicos y aritmeticos. 
+- [[]]:
+	Va a calcular logicamente los valores de la condicional, es un poco más fácil de usar
+	y tiene alguna que otra implementación dado a que es una condicon solo soportada por 
+	BASH y KSH
+- []:
+	Va a calcular logicamente los valores de la condicional, tiene alguna que otra implementacion 
+	rara o que no se puede a diferencia de [[]], pero se puede usar en cualquier shell, dado a que es 
+	un comando implementado desde la base. 
+- ():
+	Va a llamar una subshell para realizar la condicional y devolver un valor acorde lo obtenido, 
+	no es recomendable.
+
+No importa el operador que usemos, siempre debemos poner espacios entre la condicional y su operador
+[ condicional ] 
+
+Al momento de usar [] no podremos usar operadores relacionales comunes, si no que debemos usar flags.
+- ==: -eq
+- !=: -ne
+- >: -gt
+- <: -lt
+- >=: -ge
+- <=: -le
+Y se debe denotar las variables con $
+
+[ $variable -eq $otra_variable ]
+
+Estos ifs pueden ir anidados, uno encima de la respuesta o ejecucion del otro. 
+Simplemente lo hacemos normalmente, con caso if, elif si es necesario, else si queremos y 
+finalizandolo con fi
+
+### Condicionales 
+
+Las Expreciones Condicionales nos permiten hacer verificaciones de datos al momento de usar un 
+if o elif. 
+
+Se manejan diferentes operadores al momento de usar diferentes tipos de datos, con enteros vamos a 
+usar los que ya sabemos:
+- -eq
+- -ne
+- -gt
+- -ge
+- -lt
+- -le
+
+Pero con strings vamos a tener que usar otros
+- =: == o -e 
+	se puede usar el ==, pero es el mismo problema que [[]], es implementado en 
+	bash pero no se puede usar de la misma forma en otras shells
+- !=: -ne o !=
+
+Y podemos usar operadores con archivos, si tenemos el path de estos
+- -d: verificar si existe el dir
+- -e: verificar si existe el file
+- -r: verificar si el file tiene permiso de read
+- -s: verificar si el archivo tiene un tamaño mayor a 0, no esta vacio
+- -w: verificar permiso de write
+- -x: verificar permiso de execute
+
+Se pueden usar varias condicionales usando operadores lógicos o de condicional.
+- &&: and o -a
+- ||: or o -o
+- !: not o -n
+
+Se pueden usar en [] con flags, pero lo mejor es hacerlos separadaros 
+y usarlos fuera.
+
+[ conditional ] &&  [ conditional ]
+
+### Case o Switch en BASH
+
+Case o es una sencencia de condicional sencilla que nos permite mirar si una 
+variable es igual a varios valores y hacer algo por cada caso.
+Syntaxis:
+
+case $variable in
+	valor_1) 
+		ejecucion;;
+	valor_2)
+		ejecucion;;
+	*)
+		ejecucion;;
+esac
+El equivalente de else en case es el caso *),
+para terminar cada ejecucion debemos usar ;;, inclusive para el else.
+

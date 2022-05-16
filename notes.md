@@ -417,3 +417,167 @@ esac
 El equivalente de else en case es el caso *),
 para terminar cada ejecucion debemos usar ;;, inclusive para el else.
 
+### Rangos de valores
+
+Los valores tienen unos rangos, en Bash podemos referenciar estos 
+rangos, los cuales van a tener todos los valores dentro de este, sin tener 
+que definir cada valor cómo tal.
+
+Los rangos son:
+- letras {a..z}
+- letras mayusculas {A..Z}
+- numeros {0..100}
+Y en general esos.
+
+Para poder tener un range, vamos a referenciar el rango inicio y final con .. entre ellos
+y en unos {}
+
+Podemos definir el incremento en los ranges de numeros, usando otros ..incremento
+{0..100..50} va a iniciar de 0 a 100 en 50 a 50
+
+### Arreglos / Lists en Bash
+
+Los arreglos son como las listas en Python, no tienen definida su longitud y 
+pueden crecer y decrecer a convenencia. Almacenan los valores en indexes que inician
+desde 0.
+
+Se generan usando (valor valor valor), los valores deben ir separados por espacios, 
+aunque los strings sin "" deben ir separados por ,
+
+Se puede acceder a los arrays usando ${array[index]}, pero en index podemos indicar que 
+necesitamos todos los valores si usamos *
+
+Para obtener el largo del array vamos a agregarle un # al inicio del nombre de la variable,
+debemos incluir el [*] ya que si no lo hacemos solo va a sacar el largo del primer elemento 
+de nuestro array
+${#array[*]}
+
+Para agregar valores uno debe indicar el index en el que se va a agregar, yo diria que lo mejor es 
+usar el length y sumarle 1, y para eliminar valores, vamos a usar el comando unset y el array con el 
+index a eliminar
+
+Al parecer no importa si al momento de agregar un valor nuestro index elegido es bastante grande, el 
+valor siempre va a quedar al final.
+
+### For Loop
+
+Es un loop que nos va a permitir generalmente iterar o mirar los 
+valores de arreglos, como en python. Estos siquiera necesitan ser 
+arreglos, solo con tener los datos separados por espacios, el for 
+va a iterar por estos. Syntaxis
+
+for valor in lista_de_valores
+do
+	codigo por cada iteracion
+done
+
+en la lista de valores podemos poner arreglos con [*], los 
+valores con espacio entre sí. 
+
+O si queremos una lista de archivos solo poniendo *, va a iterar 
+por cada archivo en el dir que se encuentre el script
+
+Tambien usando `` o $() podemos iterar por los resultados de un 
+comando cómo ls
+
+Pero si se necesita usar un for normal podemos hacerlo con:
+
+for ((i=0; i>10; i++)){
+	ejecucion del codigo
+}
+
+Puede ir anidado entre otros loops y usar break - continue
+
+### While Loop 
+
+Es un loop que nos permite ejecutarlo hasta que una condicion no sea verdadera, 
+generalmente la condicion va a tener una variable de iteracion, como en el for.
+Aunque se pueden usar condicionales más absolutas como While esta carpeta no 
+este vacia, eliminar archivos de la carpeta.
+
+Puede ir anidado entre otros loops y usar break - continue
+
+### Crear Files y Dirs
+
+Para Crear Files y Dirs en Bash simplemente vamos a usar 
+- mkdir para dirs
+- touch para files
+
+Al momento de usar cualquiera de los dos, podemos 
+agregar o quitar permisos usando la flag -m y el 
+valor octal de lo que queremos dar y quitar permisos.
+
+En directorios, el default, es 755 rwxr-xr-x
+En files, el default, es 511 rw-r--r--
+
+### Escribir en Files
+
+Para escribir en archivos vamos a usar 
+echo y el redireccionador de output al archivo que queremos 
+escribir
+
+echo "texto" >> file
+cat "texto" >> file
+
+De esta forma se guardara el output de echo, "texto", al 
+file. Agregandolo a lo que tenga guardado, si solo queremos 
+que guarde solo el output vamos a usar solo un >, pero si 
+file no existe va a ocurrir un error ya que con >> nos permite 
+crear tambien el archivo en el que va a estar el output.
+
+Con cat podemos hacer una escritura de varias palabras o lineas usando 
+el redireccionador de input doble << y una palabra clave.
+
+cat <<EOM >> file
+hello
+goodbye
+hello again
+EOM
+
+Esto lo que hace es que va a tomar todos los inputs 
+que se escriban en el script hasta que se repita o escriba la palabra 
+clave, generalmente esta palabra es EOM o End Of Message.
+
+Si no queremos hacer uso de cat o echo, podemos simplemente 
+usar el output de un comando y el operador de redireccion >>.
+Inclusive puede ser nuestro propio script, pero 
+usando el operador desde el shell
+
+$ ./script.sh >> file
+
+### Leer Files
+
+Se puede leer los files totalmente, 
+llamandolo con cat o asignando ese valor a 
+una variable para despues usarlo.
+
+cat file
+variable=$(cat file)
+
+O se puede leer linea por linea usando While
+While IFS= read variable_linea
+do	
+	codigo
+done < file
+
+Esto loop lo que hace es recibir un archivo por el rediccionador <. 
+Este archivo internamente es tratado como IFS o Internal Field Separator, 
+los archivos, datos enviados por <. 
+Con el comando read va a leer este archivo y va a devolver cada línea en la 
+variable_linea.
+Y dentro del loop podemos usar cada línea hasta que estan se terminen.
+
+### Operaciones / Interacciones con Files
+
+Podemos ademas de crear archivos / directorios con 
+mkdir y touch, respectivamente.
+- copiar:
+	cp path_archivo path_copia
+- mover:
+	mv path_archivo path_nuevo_lugar
+- eliminar:
+	rm path_archivo
+
+Estos se pueden usar tanto a files como a dirs, pero algunas veces 
+se debe usar una flag de recursividad -r u otra cosa como forzar el comando
+-f.

@@ -581,3 +581,38 @@ mkdir y touch, respectivamente.
 Estos se pueden usar tanto a files como a dirs, pero algunas veces 
 se debe usar una flag de recursividad -r u otra cosa como forzar el comando
 -f.
+
+### Compresión Tar GZip y PBZIP 2
+
+La compresion es un tema muy importante a el momento de generar scripts. 
+
+Podemos comprimir archivos usando:
+- Tar:
+	Comprime los archivos de una buena forma, puede tomar más de uno y 
+	comprimirlo en carpetas enteras a un solo archivo
+- Gzip:
+	Solo puede comprimir un archivo a la vez, pero tiene una gran eficiencia al
+	momento de hacerlo. Se puede definir parametros para mejorar la comprecion.
+	Es excelente idea usarlo junto a tar para comprimir varios archivos a un 
+	archivo diminuto.
+- PBZIP 2:
+	Es un compresor casí igual a Gzip, pero tiene otras funcionalidades como 
+	multinucleos. Solo puede con un archivo. Pero generalmente se debe descargar.
+
+### Ponerle Contraseña a Archivos Comprimidos
+
+Para mejorar la seguridad de nuestros datos podemos agregarle una contraseña a
+nuestros archivos comprimidos, hay diferentes herramientas, 
+inclusive depronto se puede usar hasta tar, gzip y otros, quien sabe. 
+Pero vamos a usar zip, debemos instalarlo antes de usarlo.
+
+### Enviar Archivos por internet
+
+Para enviar archivos por internet vamos a usar rszync. 
+El cual usa el protocolo SSH o Secure Shell, para enviar archivos.
+
+Vamos a necesitar el nombre de usuario, el host y el directorio en el que 
+vamos a dejar el archivo
+
+Es relativamente importante hacer unos inputs para el usuario y host, ya que 
+no queremos guardar esa información
